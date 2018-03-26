@@ -26,13 +26,9 @@ var modelDefinition = {
     type: Sequelize.STRING,
     allowNull: false
   },
-  gravatar: {
-    type: Sequelize.TEXT
-  },
+  gravatar: { type: Sequelize.TEXT },
   cardWallet: {
-    type: Sequelize.STRING,
-    unique: true,
-    allowNull: false
+    type: Sequelize.STRING,unique: true, allowNull: false
   },
   mobileWallet: {
     type: Sequelize.STRING
@@ -40,12 +36,7 @@ var modelDefinition = {
   bio: {
     type: Sequelize.TEXT
   },
-  item: {
-    type: Sequelize.INTEGER
-  },
-  paid:{
-    type: Sequelize.DECIMAL
-  },
+  item: { type: Sequelize.INTEGER, defaultValue: 0 },
   role: {
     type: Sequelize.STRING,
     defaultValue: config.userRoles.user

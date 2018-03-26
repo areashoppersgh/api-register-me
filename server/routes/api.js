@@ -20,7 +20,6 @@ var APIRoutes = function(passport) {
     router.post('/directory', DirectoryController.createDirectory);
     router.post('/business', DirectoryController.createBusiness);
 
-
     // GET Routes.
     router.get('/profile', passport.authenticate('jwt', { session: false }), allowOnly(config.accessLevels.user, UserController.index));
     router.get('/admin', passport.authenticate('jwt', { session: false }), allowOnly(config.accessLevels.admin, AdminController.index));
@@ -32,9 +31,10 @@ var APIRoutes = function(passport) {
 
     router.get('/businessess', DirectoryController.getBusinessess);
     router.get('/business/:id', DirectoryController.getBusiness);
+    router.get('/business/perpage/:page', DirectoryController.getBusinessPerPage);
+    router.get('/business/byuser/:userId', DirectoryController.getBusinessByUserId);
     router.put('/business/update/:id', DirectoryController.updateBusiness);
     router.delete('/business/remove/:id', DirectoryController.removeBusiness);
-
 
     return router;
 };

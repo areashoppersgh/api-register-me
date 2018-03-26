@@ -85,11 +85,14 @@ DirectoryController.removeDirectory = function (req, res) {
 DirectoryController.createBusiness = function (req, res) {
     var body = req.body,
         geodata= '',
+        city='',
+        state='',
+        country='',
         latitude ='',
         longitude = '';
     console.log("Business request body >>>", body);
     if (!req.body.latitude || !req.body.longitude) {
-      res.json({ message: 'Please provide latitude and a longitude' });
+      res.json({ message: 'Please provide latitude and longitude coordinates' });
     } else {
        var options = {
           method: 'GET',
@@ -166,8 +169,7 @@ DirectoryController.createBusiness = function (req, res) {
       });
     }
   }
-// get all agents post
-
+// get all agents business post
 DirectoryController.getBusinessess = function (req, res) {
     Business.findAll()
     .then(function (directories) {
@@ -179,17 +181,81 @@ DirectoryController.getBusinessess = function (req, res) {
     });
 }
 
+// get all agents business post with pagination
+DirectoryController.getBusinessPerPage = function (req, res) {
+  let limit = 20;   // number of records per page
+  let offset = 0;
+  Business.findAndCountAll()
+  .then((data) => {
+    let page = req.params.page;      // page number
+    let pages = Math.ceil(data.count / limit);
+		offset = limit * (page - 1);
+    Business.findAll({
+      limit: limit,
+      offset: offset,
+      $sort: { id: 1 }
+    })
+    .then((directories) => {
+      res.status(200).json({'result': directories, 'count': data.count, 'pages': pages});
+      console.log('get all business directories per page ~ ' );
+    });
+  })
+  .catch(function (error) {
+		res.status(500).send('Internal Server Error');
+	});
+}
+
 //get agent by id
 DirectoryController.getBusiness = function (req, res) {
     Business.findById(req.params.id)
     .then(function (business) {
         res.status(200).json(business);
-        console.log('error: false ', 'message: get agent ~', business);
+        console.log('error: false ', 'message: get each business ~');
     })
     .catch(function (error) {
         res.status(500).json(error);
     });
 }
+
+//get agent by id
+DirectoryController.getBusinessByUserId = function (req, res) {
+  Business.findAll({
+    where: { userId: req.params.userId }
+  })
+  .then(function (business) {
+      res.status(200).json(business);
+      console.log('get user by userId ~');
+      console.log('total business by userId ~ ',business.length);
+
+  })
+  .catch(function (error) {
+      res.status(500).json(error);
+  });
+}
+
+//get agent by id
+// DirectoryController.getBusinessByUserId = function (req, res) {
+//   console.log('get Business by userId request >>>', req.body);
+//   let limit = 10; // number of records per page
+//   let offset = 0;
+//   Business.findAndCountAll()
+//   .then((data) => {
+//     let page = req.params.page; // page number
+//     let userId = req.params.userId; // userId
+//     let pages = Math.ceil(data.count / limit);
+// 		offset = limit * (page - 1);
+//     Business.findAll({
+//       where: { userId: userId },
+//     })
+//     .then((business) => {
+//       res.status(200).json({'result': business, 'resultCount': business.length, 'totalCount': data.count, 'pages': pages});
+//       console.log('get all business by userId ~ ');
+//     });
+//   })
+//   .catch(function (error) {
+// 		res.status(500).json(error);
+// 	});
+// }
 
 DirectoryController.updateBusiness = (req, res) => {
     console.log('update Business body >>>', req.body);

@@ -1,20 +1,20 @@
 var crypto = require('crypto'),
-    request = require('request')
-  algorithm = 'aes-256-ctr',
-  password = 'easypay-app-by-etz-aka-py',
-  utilGenerator = {};
+    request = require('request'),
+    algorithm = 'aes-256-ctr',
+    password = 'easypay-app-by-etz-aka-py',
+    utilGenerator = {};
 
 utilGenerator.generateCardWallet = function () {
   // Todo: generate cardWallet = 006 990 059 513 0008
   // Todo: get card from card table and loop through
   var bank = "006",
-    card = "",
-    cardWallet = "",
-    possible = "0123456789";
+      card = "",
+      cardWallet = "",
+      possible = "0123456789";
 
   for (var i = 0; i < 13; i++)
     card += possible.charAt(Math.floor(Math.random() * possible.length));
-  cardWallet = bank + card;
+    cardWallet = bank + card;
   return cardWallet;
 }
 
@@ -28,17 +28,21 @@ utilGenerator.generateTransId = function () {
   var customDate = "" + month + day + year;
   for (var i = 0; i < 12; i++)
     text += possible.charAt(Math.floor(Math.random() * possible.length));
-  var id = text + customDate;
+    var id = text + customDate;
   return id;
 }
 
 utilGenerator.generateFindMeId = function () {
   var text = "";
   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-  for (var i = 0; i < 8; i++)
+  var date = new Date();
+  var day = (date.getDate() < 10 ? '0' : '') + date.getDate();
+  var month = ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1);
+  var year = date.getFullYear().toString().substr(2, 2);
+  var customDate = "" + day + month + year;
+  for (var i = 0; i < 10; i++)
     text += possible.charAt(Math.floor(Math.random() * possible.length));
-  var id = text;
+    var id = text + customDate;
   return id;
 }
 

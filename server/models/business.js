@@ -45,6 +45,7 @@ var modelDefinition = {
     position: { type: Sequelize.STRING },
     websiteUrl: { type: Sequelize.STRING },
     fileUpload: { type: Sequelize.BLOB('long') },
+    itemCount: { type: Sequelize.STRING },
     verified: { type: Sequelize.STRING, defaultValue: 'false' },
     blocked: { type: Sequelize.STRING, defaultValue: 'active' }
 
